@@ -11,6 +11,9 @@
     },
     "content_scripts": [
         {
+            "js": [
+                "extension.js"
+            ],
             "css": [
                 "styles.css"
             ],

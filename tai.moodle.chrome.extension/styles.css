@@ -1,3 +1,50 @@
-.fixed-bar {
-    display: none;
+.page-header-right {
+    height: auto;
+}
+
+.page-header-right a,
+.page-header-right button,
+.page-header-right span {
+    color: #fe0000 !important;
+}
+
+.tnavheader #main-navigation .main-menu>li>div>button {
+    padding: 0.6rem 0.55rem;
+}
+
+.fixed-bar-top {
+    transform: none !important;
+    top: 0 !important;
+}
+
+.fixed-bar-menu {
+    transform: none !important;
+    top: 0 !important;
+    position: relative !important;
+    width: 100% !important;
+}
+
+.fixed-bar-hidden {
+    display: none !important;
+}
+
+.flexcols {
+    flex-flow: row;
+}
+
+.flexcols div {
+    flex-flow: row;
+}
+
+.fixed-bar button {
+    background-color: transparent !important;
+    color: black !important;
+}
+
+.eye9::before {
+    content: url(chrome-extension://__MSG_@@extension_id__/svg/eye-9.svg);
+}
+
+.eye10::before {
+    content: url(chrome-extension://__MSG_@@extension_id__/svg/eye-10.svg);
 }
