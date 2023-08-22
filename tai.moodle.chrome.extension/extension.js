@@ -6,19 +6,27 @@ console.log("mainMenu.tagName", mainMenu.tagName.toLowerCase());
 
 const pageHeaderRight = getElementByClass("page-header-right");
 if (pageHeaderRight) {
-    addMenuItem(pageHeaderRight.children[2], mainMenu);
-    addMenuItem(pageHeaderRight.children[1], mainMenu);
+    if (pageHeaderRight.children.length > 2) {
+        addMenuItem(pageHeaderRight.children[2], mainMenu);
+    }
+    if (pageHeaderRight.children.length > 1) {
+        addMenuItem(pageHeaderRight.children[1], mainMenu);
+    }
     // addMenuItem(pageHeaderRight, mainMenu);
 }
 
 const fixedBar = getElementByClass("fixed-bar");
-if (fixedBar) {
+if (fixedBar && fixedBar.children.length) {
     fixedBar.classList.add("fixed-bar-menu");
 
-    configureToggleElement(fixedBar.children[1].children[0], "eye10", "Piilota lohkot");
-    configureToggleElement(fixedBar.children[1].children[1], "eye9", "Näytä lohkot");
+    const index = fixedBar.children.length > 1 ? 1 : 0;
 
-    fixedBar.removeChild(fixedBar.children[0]);
+    configureToggleElement(fixedBar.children[index].children[0], "eye10", "Piilota lohkot");
+    configureToggleElement(fixedBar.children[index].children[1], "eye9", "Näytä lohkot");
+
+    if (index > 0) {
+        fixedBar.removeChild(fixedBar.children[index - 1]);
+    }
     addMenuItem(fixedBar, mainMenu)
 }
 
@@ -43,14 +51,13 @@ function addMenuItem(element, menuElement) {
         if (menuElement.children.length) {
             const item = document.createElement("li");
             item.appendChild(element)
-            
+
             console.log("item", item);
 
             menuElement.insertBefore(item, menuElement.children[0]);
         }
     }
 }
-
 
 function getElementByClass(className, parent) {
     if (!parent) {
