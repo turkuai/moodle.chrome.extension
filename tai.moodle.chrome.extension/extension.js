@@ -5,8 +5,14 @@ addEventListener("load", event => {
     if (scrollPosition) {
         window.scrollTo(0, scrollPosition);
         console.log("scrollPosition:", scrollPosition);
-    }
+    }    
 });
+
+const editItem = getElementByClass("item-turneditingcourse");
+console.log("editItem", editItem);
+if (editItem && editItem.children.length > 0) {
+    setupEditElementToHandleScroll(editItem.children[0]);
+}
 
 const mainNavigation = document.getElementById("main-navigation");
 const mainMenu = getElementByClass("main-menu", mainNavigation);
@@ -65,7 +71,7 @@ function calculateScrollY(direction) {
     }
 
     topElementsCount++;
-    
+
     console.log("topElementsCount:", topElementsCount);
     return window.scrollY + (topElementsCount * 42 * direction);
 }
