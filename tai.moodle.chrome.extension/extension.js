@@ -1,7 +1,7 @@
 addEventListener("load", event => {
     const urlParams = new URLSearchParams(window.location.search);
     const scrollPosition = urlParams.get("scrollTo")
-    
+
     if (scrollPosition) {
         window.scrollTo(0, scrollPosition);
         console.log("scrollPosition:", scrollPosition);
@@ -11,14 +11,73 @@ addEventListener("load", event => {
 const mainNavigation = document.getElementById("main-navigation");
 const mainMenu = getElementByClass("main-menu", mainNavigation);
 
+console.log("mainMenu", mainMenu);
+console.log("mainMenu.tagName", mainMenu.tagName.toLowerCase());
+
 if (mainMenu) {
-    console.log("mainMenu", mainMenu);
-    console.log("mainMenu.tagName", mainMenu.tagName.toLowerCase());
+    moveTitleButtons(mainMenu);
+    moveFixedBarButtons(mainMenu);
+}
+
+// ----------------------------------------------------------------------------
+
+function setupEditElementToHandleScroll(editElement) {
+    editElement.addEventListener("click", event => {
+        // event.preventDefault();
+        // event.stopPropagation();
+
+        let anchorElement = event.target;
+        // console.log("element:", anchorElement);
+        if (!anchorElement.href) {
+            anchorElement = anchorElement.parentElement;
+            // console.log("element 2:", anchorElement);
+        }
+
+        if (anchorElement.href) {
+            // isediting
+
+            console.log("original href:", anchorElement.href);
+
+            const scrollValue = calculateScrollY(anchorElement.classList.contains("isediting") ? -1 : 1);
+            anchorElement.href = anchorElement.href + "%26scrollTo=" + scrollValue;
+
+            console.log("new href:", anchorElement.href);
+        }
+    });
+}
+
+function calculateScrollY(direction) {
+
+    const sectionElements = document.getElementsByClassName("section main");
+
+    // console.log("window:", window.scrollY, window.screenTop, window.innerHeight);
+    // console.log("sectionElements:", sectionElements);
+
+    let topElementsCount = 0;
+    for (element of sectionElements) {
+        if (element.offsetTop + element.offsetHeight < window.scrollY) {
+            topElementsCount++;
+        } else {
+            break;
+        }
+        // console.log("offset:", element.id, element.offsetTop, element.offsetHeight);
+        // console.log("element:", element);
+    }
+
+    topElementsCount++;
     
+    console.log("topElementsCount:", topElementsCount);
+    return window.scrollY + (topElementsCount * 42 * direction);
+}
+
+function moveTitleButtons(mainMenu) {
     const pageHeaderRight = getElementByClass("page-header-right");
     if (pageHeaderRight) {
         if (pageHeaderRight.children.length > 2) {
             const editItem = pageHeaderRight.children[2];
+
+            setupEditElementToHandleScroll(editItem);
+
             // Edit item.
             insertMenuItemAsFirst(editItem, mainMenu);
         }
@@ -26,20 +85,22 @@ if (mainMenu) {
             insertMenuItemAsFirst(pageHeaderRight.children[1], mainMenu);
         }
     }
-    
+}
+
+function moveFixedBarButtons(mainMenu) {
     const fixedBar = getElementByClass("fixed-bar");
     if (fixedBar && fixedBar.children.length) {
         fixedBar.classList.add("fixed-bar-menu");
-    
+
         const index = fixedBar.children.length > 1 ? 1 : 0;
-    
+
         configureToggleElement(fixedBar.children[index].children[0], "eye10", "Piilota lohkot");
         configureToggleElement(fixedBar.children[index].children[1], "eye9", "Näytä lohkot");
-    
+
         if (index > 0) {
             fixedBar.removeChild(fixedBar.children[index - 1]);
         }
-        insertMenuItemAsFirst(fixedBar, mainMenu)
+        insertMenuItemAsFirst(fixedBar, mainMenu);
     }
 }
 
