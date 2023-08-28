@@ -1,28 +1,28 @@
-addEventListener("load", event => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const scrollPosition = urlParams.get("scrollTo")
+const urlParams = new URLSearchParams(window.location.search);
+const scrollPosition = urlParams.get("scrollTo")
 
-    if (scrollPosition) {
-        window.scrollTo(0, scrollPosition);
-        console.log("scrollPosition:", scrollPosition);
-    }    
-});
-
-const editItem = getElementByClass("item-turneditingcourse");
-console.log("editItem", editItem);
-if (editItem && editItem.children.length > 0) {
-    setupEditElementToHandleScroll(editItem.children[0]);
+if (scrollPosition) {
+    window.scrollTo(0, scrollPosition);
+    // console.log("scrollPosition:", scrollPosition);
 }
 
+// Move the buttons.
 const mainNavigation = document.getElementById("main-navigation");
 const mainMenu = getElementByClass("main-menu", mainNavigation);
 
-console.log("mainMenu", mainMenu);
-console.log("mainMenu.tagName", mainMenu.tagName.toLowerCase());
+// console.log("mainMenu", mainMenu);
+// console.log("mainMenu.tagName", mainMenu.tagName.toLowerCase());
 
 if (mainMenu) {
     moveTitleButtons(mainMenu);
     moveFixedBarButtons(mainMenu);
+}
+
+// Set scroll handler for second edit button.
+const editItem = getElementByClass("item-turneditingcourse");
+// console.log("editItem", editItem);
+if (editItem && editItem.children.length > 0) {
+    setupEditElementToHandleScroll(editItem.children[0]);
 }
 
 // ----------------------------------------------------------------------------
@@ -42,39 +42,47 @@ function setupEditElementToHandleScroll(editElement) {
         if (anchorElement.href) {
             // isediting
 
-            console.log("original href:", anchorElement.href);
+            // console.log("original href:", anchorElement.href);
 
             const scrollValue = calculateScrollY(anchorElement.classList.contains("isediting") ? -1 : 1);
             anchorElement.href = anchorElement.href + "%26scrollTo=" + scrollValue;
 
-            console.log("new href:", anchorElement.href);
+            // console.log("new href:", anchorElement.href);
         }
     });
 }
+
+const ADD_BUTTON_HEIGHT = 42; // hack
+const EDIT_BUTTON_HEIGHT = 35; // hack
 
 function calculateScrollY(direction) {
 
     const sectionElements = document.getElementsByClassName("section main");
 
-    // console.log("window:", window.scrollY, window.screenTop, window.innerHeight);
-    // console.log("sectionElements:", sectionElements);
-
     let topElementsCount = 0;
+    let gap = 0;
     for (element of sectionElements) {
-        if (element.offsetTop + element.offsetHeight < window.scrollY) {
+        const bounds = element.getBoundingClientRect();
+        // console.log(topElementsCount, "offset:", bounds.bottom);
+
+        if (bounds.bottom < ADD_BUTTON_HEIGHT) {
             topElementsCount++;
+
+            if (bounds.bottom > 0) {
+                gap = ADD_BUTTON_HEIGHT - bounds.bottom;
+                break;
+            }
+
         } else {
             break;
         }
-        // console.log("offset:", element.id, element.offsetTop, element.offsetHeight);
-        // console.log("element:", element);
     }
 
-    topElementsCount++;
-
-    console.log("topElementsCount:", topElementsCount);
-    return window.scrollY + (topElementsCount * 42 * direction);
+    // console.log("topElementsCount:", topElementsCount);
+    return window.scrollY + ((topElementsCount * 42 + gap) * direction);
 }
+
+// ----------------------------------------------------------------------------
 
 function moveTitleButtons(mainMenu) {
     const pageHeaderRight = getElementByClass("page-header-right");
@@ -95,17 +103,23 @@ function moveTitleButtons(mainMenu) {
 
 function moveFixedBarButtons(mainMenu) {
     const fixedBar = getElementByClass("fixed-bar");
+
+    // console.log("fixedBar", fixedBar);
+
     if (fixedBar && fixedBar.children.length) {
-        fixedBar.classList.add("fixed-bar-menu");
 
         const index = fixedBar.children.length > 1 ? 1 : 0;
 
+        // console.log("fixedBar.children", fixedBar.children);
+        // console.log("index", index, fixedBar.children.length);
+
         configureToggleElement(fixedBar.children[index].children[0], "eye10", "Piilota lohkot");
         configureToggleElement(fixedBar.children[index].children[1], "eye9", "Näytä lohkot");
-
+        
         if (index > 0) {
             fixedBar.removeChild(fixedBar.children[index - 1]);
         }
+
         insertMenuItemAsFirst(fixedBar, mainMenu);
     }
 }
@@ -130,8 +144,12 @@ function insertMenuItemAsFirst(element, menuElement) {
             item.appendChild(element)
 
             menuElement.insertBefore(item, menuElement.children[0]);
+
+            return item;
         }
     }
+
+    return null;
 }
 
 function getElementByClass(className, parent) {

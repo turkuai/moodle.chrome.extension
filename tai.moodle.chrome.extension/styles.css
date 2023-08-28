@@ -12,20 +12,16 @@
     padding: 0.6rem 0.55rem;
 }
 
-.fixed-bar-top {
-    transform: none !important;
-    top: 0 !important;
-}
-
-.fixed-bar-menu {
+.fixed-bar {
     transform: none !important;
     top: 0 !important;
     position: relative !important;
     width: 100% !important;
 }
 
-.fixed-bar {
-    display: none !important;
+.fixed-bar button {
+    background-color: transparent !important;
+    color: black !important;
 }
 
 .flexcols {
@@ -34,11 +30,6 @@
 
 .flexcols div {
     flex-flow: row;
-}
-
-.fixed-bar button {
-    background-color: transparent !important;
-    color: black !important;
 }
 
 .eye9::before {
