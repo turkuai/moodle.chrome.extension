@@ -27,6 +27,12 @@ if (editItem && editItem.children.length > 0) {
 
 // ----------------------------------------------------------------------------
 
+function removeDropdownHrefs() {
+    //dropdown-toggle
+}
+
+// ----------------------------------------------------------------------------
+
 function setupEditElementToHandleScroll(editElement) {
     editElement.addEventListener("click", event => {
         // event.preventDefault();
@@ -79,7 +85,7 @@ function calculateScrollY(direction) {
     }
 
     // console.log("topElementsCount:", topElementsCount);
-    return window.scrollY + ((topElementsCount * 42 + gap) * direction);
+    return Math.round(window.scrollY + ((topElementsCount * 42 + gap) * direction));
 }
 
 // ----------------------------------------------------------------------------
@@ -113,8 +119,10 @@ function moveFixedBarButtons(mainMenu) {
         // console.log("fixedBar.children", fixedBar.children);
         // console.log("index", index, fixedBar.children.length);
 
-        configureToggleElement(fixedBar.children[index].children[0], "eye10", "Piilota lohkot");
-        configureToggleElement(fixedBar.children[index].children[1], "eye9", "Näytä lohkot");
+        const eyeButton = fixedBar.children[index];
+
+        configureToggleElement(eyeButton.children[0], "eye10", "Piilota lohkot");
+        configureToggleElement(eyeButton.children[1], "eye9", "Näytä lohkot");
         
         if (index > 0) {
             fixedBar.removeChild(fixedBar.children[index - 1]);
