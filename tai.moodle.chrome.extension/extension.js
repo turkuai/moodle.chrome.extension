@@ -1,3 +1,4 @@
+// Auto scroll
 const urlParams = new URLSearchParams(window.location.search);
 const scrollPosition = urlParams.get("scrollTo")
 
@@ -25,10 +26,17 @@ if (editItem && editItem.children.length > 0) {
     setupEditElementToHandleScroll(editItem.children[0]);
 }
 
+removeDropdownHrefs();
+
 // ----------------------------------------------------------------------------
 
 function removeDropdownHrefs() {
-    //dropdown-toggle
+    
+    for (element of document.getElementsByClassName("dropdown-toggle")) {
+        if (element.tagName.toLowerCase() == "a" && element.getAttribute("href") == "#") {
+            element.removeAttribute("href");
+        }
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -63,11 +71,9 @@ const EDIT_BUTTON_HEIGHT = 35; // hack
 
 function calculateScrollY(direction) {
 
-    const sectionElements = document.getElementsByClassName("section main");
-
     let topElementsCount = 0;
     let gap = 0;
-    for (element of sectionElements) {
+    for (element of document.getElementsByClassName("section main")) {
         const bounds = element.getBoundingClientRect();
         // console.log(topElementsCount, "offset:", bounds.bottom);
 
