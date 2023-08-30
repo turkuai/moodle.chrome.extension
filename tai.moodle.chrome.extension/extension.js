@@ -4,19 +4,15 @@ const scrollPosition = urlParams.get("scrollTo")
 
 if (scrollPosition) {
     window.scrollTo(0, scrollPosition);
-    // console.log("scrollPosition:", scrollPosition);
 }
 
 // Move the buttons.
 const mainNavigation = document.getElementById("main-navigation");
 const mainMenu = getElementByClass("main-menu", mainNavigation);
 
-// console.log("mainMenu", mainMenu);
-// console.log("mainMenu.tagName", mainMenu.tagName.toLowerCase());
-
 if (mainMenu) {
-    moveTitleButtons(mainMenu);
-    moveFixedBarButtons(mainMenu);
+    const titleButtonsMoved = moveTitleButtons(mainMenu);
+    moveFixedBarButtons(mainMenu, titleButtonsMoved);
 }
 
 // Set scroll handler for second edit button.
@@ -43,25 +39,15 @@ function removeDropdownHrefs() {
 
 function setupEditElementToHandleScroll(editElement) {
     editElement.addEventListener("click", event => {
-        // event.preventDefault();
-        // event.stopPropagation();
 
         let anchorElement = event.target;
-        // console.log("element:", anchorElement);
         if (!anchorElement.href) {
             anchorElement = anchorElement.parentElement;
-            // console.log("element 2:", anchorElement);
         }
 
         if (anchorElement.href) {
-            // isediting
-
-            // console.log("original href:", anchorElement.href);
-
             const scrollValue = calculateScrollY(anchorElement.classList.contains("isediting") ? -1 : 1);
             anchorElement.href = anchorElement.href + "%26scrollTo=" + scrollValue;
-
-            // console.log("new href:", anchorElement.href);
         }
     });
 }
@@ -75,7 +61,6 @@ function calculateScrollY(direction) {
     let gap = 0;
     for (element of document.getElementsByClassName("section main")) {
         const bounds = element.getBoundingClientRect();
-        // console.log(topElementsCount, "offset:", bounds.bottom);
 
         if (bounds.bottom < ADD_BUTTON_HEIGHT) {
             topElementsCount++;
@@ -90,7 +75,6 @@ function calculateScrollY(direction) {
         }
     }
 
-    // console.log("topElementsCount:", topElementsCount);
     return Math.round(window.scrollY + ((topElementsCount * 42 + gap) * direction));
 }
 
@@ -110,42 +94,49 @@ function moveTitleButtons(mainMenu) {
         if (pageHeaderRight.children.length > 1) {
             insertMenuItemAsFirst(pageHeaderRight.children[1], mainMenu);
         }
+
+        return true;
+
+    } else {
+        return false;
     }
 }
 
-function moveFixedBarButtons(mainMenu) {
+function moveFixedBarButtons(mainMenu, removeSettings = true) {
     const fixedBar = getElementByClass("fixed-bar");
-
-    // console.log("fixedBar", fixedBar);
 
     if (fixedBar && fixedBar.children.length) {
 
         const index = fixedBar.children.length > 1 ? 1 : 0;
 
-        // console.log("fixedBar.children", fixedBar.children);
-        // console.log("index", index, fixedBar.children.length);
-
         const eyeButton = fixedBar.children[index];
 
-        configureToggleElement(eyeButton.children[0], "eye10", "Piilota lohkot");
-        configureToggleElement(eyeButton.children[1], "eye9", "Näytä lohkot");
+        configureIconElement(eyeButton.children[0], "eye10", "Piilota lohkot");
+        configureIconElement(eyeButton.children[1], "eye9", "Näytä lohkot");
         
-        if (index > 0) {
-            fixedBar.removeChild(fixedBar.children[index - 1]);
+        const settingsButton = fixedBar.children[index - 1];
+
+        if (settingsButton) {
+            if (index > 0 && removeSettings) {
+                fixedBar.removeChild(settingsButton);
+            } else {
+                settingsButton.classList.remove("fixed-panel-link");
+                configureIconElement(settingsButton.children[0], "fa fa-cog", "Kurssinhallinta");
+            }
         }
 
         insertMenuItemAsFirst(fixedBar, mainMenu);
     }
 }
 
-function configureToggleElement(element, className, tooltip) {
+function configureIconElement(element, className, tooltip) {
     element.innerHTML = "";
     element.setAttribute("title", "");
     element.setAttribute("data-toggle", "tooltip");
     element.setAttribute("data-original-title", tooltip);
 
     const i = document.createElement("i");
-    i.classList.add(className);
+    i.className = className;
 
     element.appendChild(i);
 }

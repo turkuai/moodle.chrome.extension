@@ -22,7 +22,8 @@
 .fixed-bar button {
     background-color: transparent !important;
     color: black !important;
-    padding-top: 0.9rem !important;
+    /* padding-top: 0.9rem !important; */
+    font-size: 1rem !important;
 }
 
 .flexcols {
