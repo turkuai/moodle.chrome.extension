@@ -75,7 +75,7 @@ function calculateScrollY(direction) {
         }
     }
 
-    return Math.round(window.scrollY + ((topElementsCount * 42 + gap) * direction));
+    return Math.round(window.scrollY + ((topElementsCount * ADD_BUTTON_HEIGHT + gap) * direction));
 }
 
 // ----------------------------------------------------------------------------
