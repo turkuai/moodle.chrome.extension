@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "Turku Edu Moodle (TAI ja Lukio)",
+    "name": "Turku Edu Moodle (TAI, lukiot ja peruskoulut)",
     "version": "0.0.5",
     "description": "Turun kaupungin opetus Moodlen laajennus.",
     "icons": {
