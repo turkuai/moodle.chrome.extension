@@ -41,3 +41,4 @@
 .eye10::before {
     content: url(chrome-extension://__MSG_@@extension_id__/svg/eye-10.svg);
 }
+
