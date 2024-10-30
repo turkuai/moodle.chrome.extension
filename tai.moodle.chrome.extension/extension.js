@@ -8,7 +8,7 @@ if (scrollPosition) {
 
 // Move the buttons.
 const mainNavigation = document.getElementById("main-navigation");
-const mainMenu = getElementByClass("main-menu", mainNavigation);
+const mainMenu = getElementByClass("mb2mm", mainNavigation);
 
 if (mainMenu) {
     const titleButtonsMoved = moveTitleButtons(mainMenu);
@@ -85,8 +85,9 @@ function moveTitleButtons(mainMenu) {
     if (pageHeaderRight) {
         if (pageHeaderRight.children.length > 2) {
             const editItem = pageHeaderRight.children[2];
-
+            
             setupEditElementToHandleScroll(editItem);
+            editItem.style.marginRight = "10px"
 
             // Edit item.
             insertMenuItemAsFirst(editItem, mainMenu);
@@ -110,6 +111,10 @@ function moveFixedBarButtons(mainMenu, removeSettings = true) {
         const index = fixedBar.children.length > 1 ? 1 : 0;
 
         const eyeButton = fixedBar.children[index];
+        
+        eyeButton.removeChild(eyeButton.children[0]);
+        eyeButton.style.padding = "0px";
+        eyeButton.style.margin = "0px"; 
 
         configureIconElement(eyeButton.children[0], "eye10", "Piilota lohkot");
         configureIconElement(eyeButton.children[1], "eye9", "Näytä lohkot");
